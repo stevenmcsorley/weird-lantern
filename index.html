@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weird lantern</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+        
+        .container {
+            position: relative;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            z-index: 2;
+        }
+        
+        .glitch-title {
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            margin-bottom: 1rem;
+            position: relative;
+            color: #ff6b6b;
+            text-shadow: 
+                0.05em 0 0 #00d9ff,
+                -0.05em -0.05em 0 #ff00ff;
+            animation: glitch 3s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            1% { transform: translate(-2px, 2px); }
+            2% { transform: translate(2px, -1px); }
+            3% { transform: translate(-1px, 1px); }
+            4% { transform: translate(1px, -2px); }
+            5% { transform: translate(0); }
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            color: #888;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        
+        .lantern {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 400px;
+            z-index: 1;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .lantern-body {
+            position: absolute;
+            width: 100%;
+            height: 80%;
+            background: radial-gradient(circle at 50% 30%, #ff6b6b22, #ff6b6b00 70%);
+            border-radius: 50% 50% 40% 40%;
+            box-shadow: 
+                0 0 60px #ff6b6b33,
+                inset 0 0 40px #ff6b6b11;
+        }
+        
+        .lantern-glow {
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, #ff6b6b44, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+            filter: blur(20px);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .card {
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #ff6b6b;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #00d9ff;
+        }
+        
+        .card-content {
+            color: #aaa;
+            line-height: 1.6;
+        }
+        
+        .footer {
+            margin-top: 4rem;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #333;
+            padding-top: 2rem;
+        }
+        
+        .cursor-trail {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #00d9ff22, transparent 70%);
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: screen;
+        }
+        
+        @media (max-width: 768px) {
+            .glitch-title {
+                font-size: 2.5rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .lantern {
+                width: 200px;
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lantern">
+        <div class="lantern-body"></div>
+        <div class="lantern-glow"></div>
+    </div>
+    
+    <div class="container">
+        <h1 class="glitch-title">weird lantern</h1>
+        <p class="subtitle">A digital campfire for curious minds. Light your own path through the noise.</p>
+        
+        <div class="content-grid">
+            <div class="card">
+                <h2 class="card-title">Glitch Aesthetics</h2>
+                <p class="card-content">Embrace digital imperfections as features, not bugs. The beauty is in the broken.</p>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title">Ambient Interaction</h2>
+                <p class="card-content">Elements respond to your presence. Move slowly, watch closely.</p>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title">Dynamic Light</h2>
+                <p class="card-content">The lantern pulses with its own rhythm, independent yet responsive.</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>weird lantern © 2026 • This site evolves with time and interaction</p>
+        </div>
+    </div>
+    
+    <script>
+        // Cursor trail effect
+        const cursorTrails = [];
+        const trailCount = 10;
+        
+        for (let i = 0; i < trailCount; i++) {
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.opacity = 0;
+            document.body.appendChild(trail);
+            cursorTrails.push({
+                element: trail,
+                x: 0,
+                y: 0,
+                opacity: 0
+            });
+        }
+        
+        let trailIndex = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            const trail = cursorTrails[trailIndex];
+            trail.x = e.clientX;
+            trail.y = e.clientY;
+            trail.opacity = 1;
+            trail.element.style.left = trail.x + 'px';
+            trail.element.style.top = trail.y + 'px';
+            trail.element.style.opacity = 1;
+            
+            trailIndex = (trailIndex + 1) % trailCount;
+        });
+        
+        // Fade out trails
+        function updateTrails {
+            cursorTrails.forEach(trail => {
+                if (trail.opacity > 0) {
+                    trail.opacity -= 0.05;
+                    trail.element.style.opacity = trail.opacity;
+                }
+            });
+            requestAnimationFrame(updateTrails);
+        }
+        
+        updateTrails;
+        
+        // Interactive card effects
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect;
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateY = (x - centerX) / 25;
+                const rotateX = (centerY - y) / 25;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+            });
+            
+            card.addEventListener('mouseleave',  => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(-5px)';
+            });
+        });
+        
+        // Lantern interaction
+        const lantern = document.querySelector('.lantern');
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            lantern.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+        });
+        
+        // Time-based color shift
+        function updateColors {
+            const hour = new Date.getHours;
+            const root = document.documentElement;
+            
+            if (hour >= 18 || hour <= 6) {
+                // Night mode
+                document.body.style.background = '#0a0a0a';
+                document.querySelector('.glitch-title').style.color = '#8a2be2';
+            } else {
+                // Day mode
+                document.body.style.background = '#1a1a2e';
+                document.querySelector('.glitch-title').style.color = '#ff6b6b';
+            }
+        }
+        
+        updateColors;
+        setInterval(updateColors, 60000); // Update every minute
+    </script>
+</body>
+</html>
