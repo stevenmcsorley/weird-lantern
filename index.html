@@ -120,6 +120,30 @@
             border-color: #ff6b6b;
             box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);
         }
+
+        .card:active {
+            transform: translateY(-2px) scale(0.99);
+        }
+
+        .card::after {
+            content: 'click';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+        }
+
+        .card.flash {
+            box-shadow: 0 0 40px rgba(0, 217, 255, 0.4);
+            border-color: #00d9ff;
+        }
+
+        .card.flash .card-title {
+            color: #b3ff00;
+        }
         
         .card-title {
             font-size: 1.5rem;
@@ -130,6 +154,16 @@
         .card-content {
             color: #aaa;
             line-height: 1.6;
+        }
+
+        .ambient-drift {
+            animation: drift 10s ease-in-out infinite;
+        }
+
+        @keyframes drift {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0); }
         }
         
         .footer {
@@ -439,6 +473,37 @@
             document.body.classList.toggle('reality-distort', isDistorted);
             distortButton.textContent = isDistorted ? 'Restore Reality' : 'Distort Reality';
         });
+
+        // Card interactions
+        const cardList = Array.from(cards);
+        const [cardGlitch, cardAmbient, cardDynamic] = cardList;
+
+        if (cardGlitch) {
+            cardGlitch.addEventListener('click', () => {
+                generateSparks();
+                cardGlitch.classList.add('flash');
+                setTimeout(() => cardGlitch.classList.remove('flash'), 400);
+            });
+        }
+
+        if (cardAmbient) {
+            cardAmbient.addEventListener('click', () => {
+                const trails = document.querySelectorAll('.cursor-trail');
+                trails.forEach(trail => trail.classList.toggle('ambient-drift'));
+                cardAmbient.classList.add('flash');
+                setTimeout(() => cardAmbient.classList.remove('flash'), 400);
+            });
+        }
+
+        if (cardDynamic) {
+            cardDynamic.addEventListener('click', () => {
+                isDistorted = !isDistorted;
+                document.body.classList.toggle('reality-distort', isDistorted);
+                distortButton.textContent = isDistorted ? 'Restore Reality' : 'Distort Reality';
+                cardDynamic.classList.add('flash');
+                setTimeout(() => cardDynamic.classList.remove('flash'), 400);
+            });
+        }
     </script>
 </body>
 </html>
