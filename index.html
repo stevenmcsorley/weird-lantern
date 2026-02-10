@@ -140,6 +140,82 @@
             border-top: 1px solid #333;
             padding-top: 2rem;
         }
+
+        .controls {
+            margin: 3rem 0 1rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid #00d9ff;
+            color: #00d9ff;
+            padding: 0.8rem 1.4rem;
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 999px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+        }
+
+        .btn--spark {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        .btn--spark:hover {
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.35);
+        }
+
+        .btn--distort {
+            border-color: #b3ff00;
+            color: #b3ff00;
+        }
+
+        .btn--distort:hover {
+            box-shadow: 0 0 20px rgba(179, 255, 0, 0.35);
+        }
+
+        .spark {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #ff6b6b;
+            pointer-events: none;
+            z-index: 5;
+            animation: spark 700ms ease-out forwards;
+        }
+
+        @keyframes spark {
+            from {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            to {
+                transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2);
+                opacity: 0;
+            }
+        }
+
+        .reality-distort {
+            animation: reality 2.2s infinite alternate;
+            filter: hue-rotate(40deg) saturate(1.4) contrast(1.2);
+        }
+
+        @keyframes reality {
+            0% { filter: hue-rotate(0deg) saturate(1.1) contrast(1.1); }
+            100% { filter: hue-rotate(120deg) saturate(1.6) contrast(1.25); }
+        }
         
         .cursor-trail {
             position: fixed;
@@ -177,6 +253,11 @@
     <div class="container">
         <h1 class="glitch-title">weird lantern</h1>
         <p class="subtitle">A digital campfire for curious minds. Light your own path through the noise.</p>
+
+        <div class="controls">
+            <button id="sparkButton" class="btn btn--spark">Generate Sparks</button>
+            <button id="distortButton" class="btn btn--distort">Distort Reality</button>
+        </div>
         
         <div class="content-grid">
             <div class="card">
@@ -293,6 +374,38 @@
         
         updateColors();
         setInterval(updateColors, 60000); // Update every minute
+
+        // Control buttons
+        const sparkButton = document.getElementById('sparkButton');
+        const distortButton = document.getElementById('distortButton');
+        let isDistorted = false;
+
+        function generateSparks() {
+            const rect = lantern.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 24; i++) {
+                const spark = document.createElement('div');
+                spark.className = 'spark';
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 40 + Math.random() * 90;
+                spark.style.setProperty('--dx', `${Math.cos(angle) * distance}px`);
+                spark.style.setProperty('--dy', `${Math.sin(angle) * distance}px`);
+                spark.style.left = `${cx}px`;
+                spark.style.top = `${cy}px`;
+                document.body.appendChild(spark);
+                setTimeout(() => spark.remove(), 700);
+            }
+        }
+
+        sparkButton.addEventListener('click', generateSparks);
+
+        distortButton.addEventListener('click', () => {
+            isDistorted = !isDistorted;
+            document.body.classList.toggle('reality-distort', isDistorted);
+            distortButton.textContent = isDistorted ? 'Restore Reality' : 'Distort Reality';
+        });
     </script>
 </body>
 </html>
